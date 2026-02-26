@@ -1,0 +1,245 @@
+/**
+ * HANS HQ semantic design tokens mapped to color primitives.
+ *
+ * Source: screenshot from Figma frame node 2653:5154.
+ * Primitive values are defined in tokens/colors.css.
+ */
+
+@import "./typography.css";
+
+:root {
+  /* ========== Alpha primitives (derived) ========== */
+  --alpha-neutral-24: color-mix(in srgb, var(--color-neutral-950) 24%, transparent);
+  --alpha-neutral-16: color-mix(in srgb, var(--color-neutral-950) 16%, transparent);
+  --alpha-blue-24: color-mix(in srgb, var(--color-info-500) 24%, transparent);
+  --alpha-blue-16: color-mix(in srgb, var(--color-info-500) 16%, transparent);
+  --alpha-orange-24: color-mix(in srgb, var(--color-orange-500) 24%, transparent);
+  --alpha-orange-16: color-mix(in srgb, var(--color-orange-500) 16%, transparent);
+  --alpha-red-24: color-mix(in srgb, var(--color-red-500) 24%, transparent);
+  --alpha-red-16: color-mix(in srgb, var(--color-red-500) 16%, transparent);
+  --alpha-green-16: color-mix(in srgb, var(--color-green-500) 16%, transparent);
+  --alpha-green-10: color-mix(in srgb, var(--color-green-500) 10%, transparent);
+  --alpha-yellow-24: color-mix(in srgb, var(--color-yellow-500) 24%, transparent);
+  --alpha-yellow-16: color-mix(in srgb, var(--color-yellow-500) 16%, transparent);
+  --alpha-accent-purple-24: color-mix(in srgb, var(--color-purple-500) 24%, transparent);
+  --alpha-accent-purple-16: color-mix(in srgb, var(--color-purple-500) 16%, transparent);
+  --alpha-sky-24: color-mix(in srgb, var(--color-sky-500) 24%, transparent);
+  --alpha-sky-16: color-mix(in srgb, var(--color-sky-500) 16%, transparent);
+  --alpha-pink-24: color-mix(in srgb, var(--color-pink-500) 24%, transparent);
+  --alpha-pink-16: color-mix(in srgb, var(--color-pink-500) 16%, transparent);
+  --alpha-teal-24: color-mix(in srgb, var(--color-brand-500) 24%, transparent);
+  --alpha-teal-16: color-mix(in srgb, var(--color-brand-500) 16%, transparent);
+
+  /* ========== Static ========== */
+  --color-static-black: var(--color-neutral-950);
+  --color-static-white: var(--color-neutral-0);
+
+  /* ========== Background ========== */
+  --color-bg-strong-950: var(--color-neutral-950);
+  --color-bg-surface-800: var(--color-neutral-800);
+  --color-bg-sub-300: var(--color-neutral-300);
+  --color-bg-soft-100: var(--color-neutral-100);
+  --color-bg-weak-50: var(--color-neutral-50);
+  --color-bg-white-0: var(--color-neutral-0);
+
+  /* ========== Text ========== */
+  --color-text-strong-950: var(--color-neutral-950);
+  --color-text-sub-800: var(--color-neutral-800);
+  --color-text-soft-600: var(--color-neutral-600);
+  --color-text-disabled-400: var(--color-neutral-400);
+  --color-text-white-0: var(--color-neutral-0);
+
+  /* ========== Stroke ========== */
+  --color-stroke-strong-950: var(--color-neutral-950);
+  --color-stroke-sub-300: var(--color-neutral-500);
+  --color-stroke-soft-100: var(--color-neutral-100);
+  --color-stroke-white-0: var(--color-neutral-0);
+
+  /* ========== Icon ========== */
+  --color-icon-strong-950: var(--color-neutral-950);
+  --color-icon-sub-800: var(--color-neutral-800);
+  --color-icon-soft-600: var(--color-neutral-600);
+  --color-icon-disabled-300: var(--color-neutral-400);
+  --color-icon-white-0: var(--color-neutral-0);
+
+  /* ========== State / Faded ========== */
+  --color-state-faded-dark: var(--color-neutral-800);
+  --color-state-faded-base: var(--color-neutral-500);
+  --color-state-faded-light: var(--color-neutral-200);
+  --color-state-faded-lighter: var(--color-neutral-100);
+
+  /* ========== State / Information ========== */
+  --color-state-information-dark: var(--color-info-700);
+  --color-state-information-base: var(--color-info-500);
+  --color-state-information-light: var(--color-info-100);
+  --color-state-information-lighter: var(--color-info-50);
+
+  /* ========== State / Warning ========== */
+  --color-state-warning-dark: var(--color-orange-950);
+  --color-state-warning-base: var(--color-orange-500);
+  --color-state-warning-light: var(--color-orange-200);
+  --color-state-warning-lighter: var(--color-orange-50);
+
+  /* ========== State / Error ========== */
+  --color-state-error-dark: var(--color-red-950);
+  --color-state-error-base: var(--color-red-500);
+  --color-state-error-light: var(--color-red-200);
+  --color-state-error-lighter: var(--color-red-50);
+
+  /* ========== State / Success ========== */
+  --color-state-success-dark: var(--color-green-950);
+  --color-state-success-base: var(--color-green-500);
+  --color-state-success-light: var(--color-green-200);
+  --color-state-success-lighter: var(--color-green-50);
+
+  /* ========== State / Away ========== */
+  --color-state-away-dark: var(--color-yellow-950);
+  --color-state-away-base: var(--color-yellow-500);
+  --color-state-away-light: var(--color-yellow-200);
+  --color-state-away-lighter: var(--color-yellow-50);
+
+  /* ========== State / Feature ========== */
+  --color-state-feature-dark: var(--color-purple-950);
+  --color-state-feature-base: var(--color-purple-500);
+  --color-state-feature-light: var(--color-purple-200);
+  --color-state-feature-lighter: var(--color-purple-50);
+
+  /* ========== State / Verified ========== */
+  --color-state-verified-dark: var(--color-sky-950);
+  --color-state-verified-base: var(--color-sky-500);
+  --color-state-verified-light: var(--color-sky-200);
+  --color-state-verified-lighter: var(--color-sky-50);
+
+  /* ========== State / Highlighted ========== */
+  --color-state-highlighted-dark: var(--color-pink-950);
+  --color-state-highlighted-base: var(--color-pink-500);
+  --color-state-highlighted-light: var(--color-pink-200);
+  --color-state-highlighted-lighter: var(--color-pink-50);
+
+  /* ========== State / Stable ========== */
+  --color-state-stable-dark: var(--color-brand-950);
+  --color-state-stable-base: var(--color-brand-500);
+  --color-state-stable-light: var(--color-brand-200);
+  --color-state-stable-lighter: var(--color-brand-50);
+
+  /* ========== Radius ========== */
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-full: 999px;
+
+  /* ========== Spacing ========== */
+  --spacing-0: 0px;
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-12: 12px;
+  --spacing-14: 14px;
+  --spacing-16: 16px;
+  --spacing-18: 18px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+}
+
+[data-theme="dark"] {
+  /* ========== Static ========== */
+  --color-static-black: var(--color-neutral-950);
+  --color-static-white: var(--color-neutral-0);
+
+  /* ========== Background ========== */
+  --color-bg-strong-950: var(--color-neutral-0);
+  --color-bg-surface-800: var(--color-neutral-200);
+  --color-bg-sub-300: var(--color-neutral-600);
+  --color-bg-soft-100: var(--color-neutral-700);
+  --color-bg-weak-50: var(--color-neutral-900);
+  --color-bg-white-0: var(--color-neutral-950);
+
+  /* ========== Text ========== */
+  --color-text-strong-950: var(--color-neutral-0);
+  --color-text-sub-800: var(--color-neutral-400);
+  --color-text-soft-600: var(--color-neutral-500);
+  --color-text-disabled-400: var(--color-neutral-600);
+  --color-text-white-0: var(--color-neutral-950);
+
+  /* ========== Stroke ========== */
+  --color-stroke-strong-950: var(--color-neutral-0);
+  --color-stroke-sub-300: var(--color-neutral-600);
+  --color-stroke-soft-100: var(--color-neutral-700);
+  --color-stroke-white-0: var(--color-neutral-950);
+
+  /* ========== Icon ========== */
+  --color-icon-strong-950: var(--color-neutral-0);
+  --color-icon-sub-800: var(--color-neutral-400);
+  --color-icon-soft-600: var(--color-neutral-500);
+  --color-icon-disabled-300: var(--color-neutral-600);
+  --color-icon-white-0: var(--color-neutral-950);
+
+  /* ========== State / Faded ========== */
+  --color-state-faded-dark: var(--color-neutral-300);
+  --color-state-faded-base: var(--color-neutral-500);
+  --color-state-faded-light: var(--alpha-neutral-24);
+  --color-state-faded-lighter: var(--alpha-neutral-16);
+
+  /* ========== State / Information ========== */
+  --color-state-information-dark: var(--color-info-500);
+  --color-state-information-base: var(--color-info-500);
+  --color-state-information-light: var(--alpha-blue-24);
+  --color-state-information-lighter: var(--alpha-blue-16);
+
+  /* ========== State / Warning ========== */
+  --color-state-warning-dark: var(--color-orange-400);
+  --color-state-warning-base: var(--color-orange-600);
+  --color-state-warning-light: var(--alpha-orange-24);
+  --color-state-warning-lighter: var(--alpha-orange-16);
+
+  /* ========== State / Error ========== */
+  --color-state-error-dark: var(--color-red-400);
+  --color-state-error-base: var(--color-red-600);
+  --color-state-error-light: var(--alpha-red-24);
+  --color-state-error-lighter: var(--alpha-red-16);
+
+  /* ========== State / Success ========== */
+  --color-state-success-dark: var(--color-green-400);
+  --color-state-success-base: var(--color-green-600);
+  --color-state-success-light: var(--alpha-green-16);
+  --color-state-success-lighter: var(--alpha-green-10);
+
+  /* ========== State / Away ========== */
+  --color-state-away-dark: var(--color-yellow-400);
+  --color-state-away-base: var(--color-yellow-600);
+  --color-state-away-light: var(--alpha-yellow-24);
+  --color-state-away-lighter: var(--alpha-yellow-16);
+
+  /* ========== State / Feature ========== */
+  --color-state-feature-dark: var(--color-purple-400);
+  --color-state-feature-base: var(--color-purple-500);
+  --color-state-feature-light: var(--alpha-accent-purple-24);
+  --color-state-feature-lighter: var(--alpha-accent-purple-16);
+
+  /* ========== State / Verified ========== */
+  --color-state-verified-dark: var(--color-sky-400);
+  --color-state-verified-base: var(--color-sky-600);
+  --color-state-verified-light: var(--alpha-sky-24);
+  --color-state-verified-lighter: var(--alpha-sky-16);
+
+  /* ========== State / Highlighted ========== */
+  --color-state-highlighted-dark: var(--color-pink-400);
+  --color-state-highlighted-base: var(--color-pink-600);
+  --color-state-highlighted-light: var(--alpha-pink-24);
+  --color-state-highlighted-lighter: var(--alpha-pink-16);
+
+  /* ========== State / Stable ========== */
+  --color-state-stable-dark: var(--color-brand-400);
+  --color-state-stable-base: var(--color-brand-600);
+  --color-state-stable-light: var(--alpha-teal-24);
+  --color-state-stable-lighter: var(--alpha-teal-16);
+}

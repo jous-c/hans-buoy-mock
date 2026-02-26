@@ -1,0 +1,59 @@
+---
+description: HANS HQ Design System — Figma variables, design tokens, when and how to use them
+globs: "**/*.{css,scss,ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# HANS HQ Design System — Design Tokens & Variables
+
+**Source:** [HANS-HQ-Design-System](https://www.figma.com/design/5oerJ3lDIL7xbhwEeq8SB0/HANS-HQ-Design-System?node-id=2623-2287)  
+**Figma fileKey:** `5oerJ3lDIL7xbhwEeq8SB0` · **Variables node:** `2623:2287`
+
+When implementing UI from this design system, call **get_design_context** with this file and node to get code, screenshots, and token hints. Map any design tokens or CSS variables returned to the project’s theme/token system.
+
+---
+
+## Token categories (align with Figma Variables)
+
+Use these categories when defining or consuming tokens. Prefer tokens over raw values everywhere.
+
+| Category | Use for | Example usage |
+|----------|--------|----------------|
+| **Color** | Backgrounds, borders, text, icons, semantic (success/error/warning) | `var(--color-primary)` or theme `colors.primary` |
+| **Typography** | Font family, size, weight, line-height, letter-spacing | `var(--font-body)` or theme `typography.body` |
+| **Spacing** | Padding, margin, gaps (use scale, not arbitrary px) | `var(--space-4)` or theme `spacing[4]` |
+| **Radius** | Border radius for buttons, cards, inputs | `var(--radius-md)` or theme `radius.md` |
+| **Shadow** | Elevation, cards, modals | `var(--shadow-sm)` or theme `shadows.sm` |
+| **Breakpoints / Layout** | Grid, container width, responsive behavior | Map to Tailwind/CSS breakpoints if used |
+
+---
+
+## When to use tokens
+
+- **Always** for color, type, spacing, radius, and shadow in components.
+- **Never** hardcode hex/rgb, arbitrary `px` for spacing/size, or font names/weights unless no token exists.
+- **Semantic over raw:** Prefer semantic tokens (e.g. `color.text.primary`, `color.bg.surface`) over raw primitives when the design system defines both.
+
+---
+
+## How to use them
+
+1. **Single source of truth:** Keep token names and values in one place (e.g. `tokens.js`, `theme.ts`, or CSS custom properties) and mirror Figma variable names where possible.
+2. **Naming:** Match Figma naming (e.g. `Primary/500`, `Spacing/16`) with a consistent code convention (e.g. `color-primary-500`, `space-16`).
+3. **Modes/themes:** If Figma has modes (e.g. light/dark), map each mode to a theme and switch via class or data attribute.
+4. **In components:** Reference tokens only — no magic numbers or raw colors.
+
+```ts
+// Prefer
+<div style={{ padding: theme.spacing[4], color: theme.colors.text.primary }} />
+
+// Avoid
+<div style={{ padding: 16, color: '#1a1a1a' }} />
+```
+
+---
+
+## Syncing from Figma
+
+- Use **Figma MCP → get_design_context** with this file and node when building or auditing UI to get current tokens/code hints.
+- If your org uses Figma’s Variables API or Tokens Studio, sync variables into this project’s token files so code and Figma stay aligned.

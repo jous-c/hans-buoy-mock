@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@import "../tokens/design-tokens.css";
+@import "../tokens/colors.css";
+@import "../tokens/typography.css";
+
+@theme inline {
+  --color-background: var(--color-bg-white-0);
+  --color-foreground: var(--color-text-strong-950);
+  --color-primary: var(--color-state-stable-base);
+  --color-primary-foreground: var(--color-text-white-0);
+  --color-muted: var(--color-bg-soft-100);
+  --color-muted-foreground: var(--color-text-soft-600);
+  --radius-md: var(--radius-8, 0.5rem);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-family-sans, Inter, system-ui, sans-serif);
+}
+
+h1 {
+  font-family: var(--font-h1-family, var(--font-family-sans, Inter, system-ui, sans-serif));
+}
+
+.paragraph-large {
+  font: var(--font-paragraph-large);
+  letter-spacing: var(--font-paragraph-large-letter-spacing);
+}

@@ -8,10 +8,33 @@
   --color-background: var(--color-bg-white-0);
   --color-foreground: var(--color-text-strong-950);
   --color-primary: var(--color-state-stable-base);
+  --color-bg-white: var(--color-bg-white-0);
   --color-primary-foreground: var(--color-text-white-0);
+  --color-primary-dark: var(--color-state-stable-dark);
+  --color-primary-light: var(--color-state-stable-light);
+  --color-primary-lighter: var(--color-state-stable-lighter);
   --color-muted: var(--color-bg-soft-100);
   --color-muted-foreground: var(--color-text-soft-600);
+  --color-stroke: var(--color-stroke-soft-100);
+  --color-disabled: var(--color-text-disabled-400);
+  --color-secondary: var(--color-bg-strong-950);
+  --color-secondary-foreground: var(--color-text-white-0);
+  --color-secondary-dark: var(--color-bg-surface-800);
+  --color-secondary-light: var(--color-bg-soft-100);
+  --color-secondary-lighter: var(--color-bg-weak-50);
+  --color-destructive: var(--color-state-error-base);
+  --color-destructive-foreground: var(--color-text-white-0);
+  --color-destructive-dark: var(--color-state-error-dark);
+  --color-destructive-light: var(--color-state-error-light);
+  --color-destructive-lighter: var(--color-state-error-lighter);
+  --color-stroke-sub: var(--color-stroke-sub-300);
+  --color-stroke-strong: var(--color-stroke-strong-950);
+  --color-icon-soft: var(--color-icon-soft-600);
+  --color-icon-disabled: var(--color-icon-disabled-300);
+  --color-text-sub: var(--color-text-sub-800);
+  --radius-sm: var(--radius-6, 0.375rem);
   --radius-md: var(--radius-8, 0.5rem);
+  --radius-lg: var(--radius-10, 0.625rem);
 }
 
 body {
@@ -29,4 +52,12 @@ h1 {
 .paragraph-large {
   font: var(--font-paragraph-large);
   letter-spacing: var(--font-paragraph-large-letter-spacing);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

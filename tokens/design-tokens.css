@@ -11,6 +11,7 @@
   /* ========== Alpha primitives (derived) ========== */
   --alpha-neutral-24: color-mix(in srgb, var(--color-neutral-950) 24%, transparent);
   --alpha-neutral-16: color-mix(in srgb, var(--color-neutral-950) 16%, transparent);
+  --alpha-neutral-10: color-mix(in srgb, var(--color-neutral-950) 10%, transparent);
   --alpha-blue-24: color-mix(in srgb, var(--color-info-500) 24%, transparent);
   --alpha-blue-16: color-mix(in srgb, var(--color-info-500) 16%, transparent);
   --alpha-orange-24: color-mix(in srgb, var(--color-orange-500) 24%, transparent);
@@ -38,7 +39,7 @@
   --color-bg-strong-950: var(--color-neutral-950);
   --color-bg-surface-800: var(--color-neutral-800);
   --color-bg-sub-300: var(--color-neutral-300);
-  --color-bg-soft-100: var(--color-neutral-100);
+  --color-bg-soft-100: var(--color-neutral-75);
   --color-bg-weak-50: var(--color-neutral-50);
   --color-bg-white-0: var(--color-neutral-0);
 
@@ -119,8 +120,9 @@
   /* ========== State / Stable ========== */
   --color-state-stable-dark: var(--color-brand-950);
   --color-state-stable-base: var(--color-brand-500);
-  --color-state-stable-light: var(--color-brand-200);
-  --color-state-stable-lighter: var(--color-brand-50);
+  --color-state-stable-light: var(--color-brand-50);
+  --color-state-stable-lighter: var(--color-sky-200);
+  --color-state-bg-lighter: var(--color-neutral-50);
 
   /* ========== Radius ========== */
   --radius-4: 4px;

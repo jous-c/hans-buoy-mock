@@ -142,7 +142,7 @@ function TableRow({
   contractExpiration,
   ...props
 }: TableRowProps) {
-  const textCell = "min-w-0 flex-1 truncate text-base leading-6 tracking-[-0.011em] text-foreground";
+  const textCell = "min-w-0 flex-1 truncate text-sm leading-5 tracking-[-0.006em] text-foreground";
 
   return (
     <div

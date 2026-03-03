@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ListFilter, ArrowUpDown, Columns3 } from "lucide-react";
 
 import { SideNav } from "@/components/ui/side-nav";
@@ -6,11 +6,13 @@ import { ViewTabBar, type ViewTabItem } from "@/components/ui/view-tab-bar";
 import { InputField } from "@/components/ui/input-field";
 import { Button } from "@/components/ui/button";
 import { TableHeader, type TableHeaderColumn } from "@/components/ui/table-header";
-import { TableRow, type BadgeVariant } from "@/components/ui/table-row";
+import { TableRow } from "@/components/ui/table-row";
 import { Pagination } from "@/components/ui/pagination";
+import { FilterPopup, type FilterCategory } from "@/components/ui/filter-popup";
+import { patients, type PatientData } from "@/data/patients";
 
 const tabs: ViewTabItem[] = [
-  { label: "All patients", count: 42 },
+  { label: "All patients", count: 40 },
   { label: "Health at risk", count: 12 },
   { label: "Low engagement patients", count: 12 },
   { label: "Elderly patients", count: 12 },
@@ -18,7 +20,7 @@ const tabs: ViewTabItem[] = [
   { label: "Early stage patients", count: 12 },
 ];
 
-const columns: TableHeaderColumn[] = [
+const columnDefs: TableHeaderColumn[] = [
   { label: "Patient name", width: 220, sortable: true },
   { label: "Patient ID", width: 120 },
   { label: "Health status", width: 150 },
@@ -37,222 +39,82 @@ const columns: TableHeaderColumn[] = [
   { label: "Contract expiration", width: 160 },
 ];
 
-type PatientData = {
-  name: string;
-  subtitle: string;
-  patientId: string;
-  riskStatus: { label: string; variant: BadgeVariant };
-  priority: { label: string; variant: BadgeVariant };
-  program: string;
-  provider: string;
-  nextAppointment: string;
-  lastAppointment: string;
-  lastLab: string;
-  lastCimtDate: string;
-  lastSleep: string;
-  inflammationPanel: boolean;
-  lastOralDate: string;
-  insurance: string;
-  contractType: string;
-  contractExpiration: string;
-};
+function getPatientValue(patient: PatientData, columnLabel: string): string {
+  switch (columnLabel) {
+    case "Patient name": return patient.name;
+    case "Patient ID": return patient.patientId;
+    case "Health status": return patient.riskStatus.label;
+    case "Engagement": return patient.priority.label;
+    case "Journey stage": return patient.program;
+    case "Provider": return patient.provider;
+    case "Next appointment": return patient.nextAppointment;
+    case "Last appointment": return patient.lastAppointment;
+    case "Last lab": return patient.lastLab;
+    case "Last CIMT date": return patient.lastCimtDate;
+    case "Last sleep": return patient.lastSleep;
+    case "Inflammation panel": return patient.inflammationPanel ? "Complete" : "Incomplete";
+    case "Last oral date": return patient.lastOralDate;
+    case "Insurance": return patient.insurance;
+    case "Contract type": return patient.contractType;
+    case "Contract expiration": return patient.contractExpiration;
+    default: return "";
+  }
+}
 
-const patients: PatientData[] = [
-  {
-    name: "Amanda Lee",
-    subtitle: "34 · Female",
-    patientId: "PT-10042",
-    riskStatus: { label: "At risk", variant: "error" },
-    priority: { label: "High", variant: "faded" },
-    program: "Foundational Support",
-    provider: "Dr. Mewborn",
-    nextAppointment: "08/08/2028",
-    lastAppointment: "08/08/2028",
-    lastLab: "08/20/2028",
-    lastCimtDate: "07/15/2028",
-    lastSleep: "08/01/2028",
-    inflammationPanel: true,
-    lastOralDate: "06/20/2028",
-    insurance: "Aetna PPO",
-    contractType: "Annual",
-    contractExpiration: "12/31/2028",
-  },
-  {
-    name: "James Carter",
-    subtitle: "58 · Male",
-    patientId: "PT-10078",
-    riskStatus: { label: "Stable", variant: "success" },
-    priority: { label: "Medium", variant: "faded" },
-    program: "Chronic Care",
-    provider: "Dr. Patel",
-    nextAppointment: "09/12/2028",
-    lastAppointment: "07/15/2028",
-    lastLab: "07/20/2028",
-    lastCimtDate: "05/10/2028",
-    lastSleep: "07/05/2028",
-    inflammationPanel: false,
-    lastOralDate: "04/18/2028",
-    insurance: "Blue Cross",
-    contractType: "Quarterly",
-    contractExpiration: "09/30/2028",
-  },
-  {
-    name: "Sofia Rodriguez",
-    subtitle: "27 · Female",
-    patientId: "PT-10103",
-    riskStatus: { label: "At risk", variant: "error" },
-    priority: { label: "High", variant: "faded" },
-    program: "Foundational Support",
-    provider: "Dr. Mewborn",
-    nextAppointment: "08/10/2028",
-    lastAppointment: "08/01/2028",
-    lastLab: "08/05/2028",
-    lastCimtDate: "07/20/2028",
-    lastSleep: "07/28/2028",
-    inflammationPanel: true,
-    lastOralDate: "07/01/2028",
-    insurance: "UnitedHealth",
-    contractType: "Annual",
-    contractExpiration: "03/15/2029",
-  },
-  {
-    name: "Michael Chen",
-    subtitle: "45 · Male",
-    patientId: "PT-10045",
-    riskStatus: { label: "Moderate", variant: "warning" },
-    priority: { label: "Medium", variant: "faded" },
-    program: "Behavioral Health",
-    provider: "Dr. Singh",
-    nextAppointment: "08/22/2028",
-    lastAppointment: "07/28/2028",
-    lastLab: "07/30/2028",
-    lastCimtDate: "06/12/2028",
-    lastSleep: "07/18/2028",
-    inflammationPanel: false,
-    lastOralDate: "05/22/2028",
-    insurance: "Cigna HMO",
-    contractType: "Monthly",
-    contractExpiration: "08/31/2028",
-  },
-  {
-    name: "Emily Watson",
-    subtitle: "62 · Female",
-    patientId: "PT-10091",
-    riskStatus: { label: "Stable", variant: "success" },
-    priority: { label: "Low", variant: "faded" },
-    program: "Chronic Care",
-    provider: "Dr. Patel",
-    nextAppointment: "09/05/2028",
-    lastAppointment: "08/02/2028",
-    lastLab: "08/10/2028",
-    lastCimtDate: "07/01/2028",
-    lastSleep: "07/25/2028",
-    inflammationPanel: true,
-    lastOralDate: "06/15/2028",
-    insurance: "Medicare",
-    contractType: "Annual",
-    contractExpiration: "12/31/2028",
-  },
-  {
-    name: "David Kim",
-    subtitle: "39 · Male",
-    patientId: "PT-10112",
-    riskStatus: { label: "At risk", variant: "error" },
-    priority: { label: "High", variant: "faded" },
-    program: "Foundational Support",
-    provider: "Dr. Mewborn",
-    nextAppointment: "08/08/2028",
-    lastAppointment: "08/08/2028",
-    lastLab: "08/20/2028",
-    lastCimtDate: "07/10/2028",
-    lastSleep: "08/02/2028",
-    inflammationPanel: true,
-    lastOralDate: "06/28/2028",
-    insurance: "Aetna PPO",
-    contractType: "Quarterly",
-    contractExpiration: "09/30/2028",
-  },
-  {
-    name: "Rachel Green",
-    subtitle: "51 · Female",
-    patientId: "PT-10067",
-    riskStatus: { label: "Moderate", variant: "warning" },
-    priority: { label: "Medium", variant: "faded" },
-    program: "Behavioral Health",
-    provider: "Dr. Singh",
-    nextAppointment: "08/18/2028",
-    lastAppointment: "07/25/2028",
-    lastLab: "08/01/2028",
-    lastCimtDate: "06/05/2028",
-    lastSleep: "07/20/2028",
-    inflammationPanel: false,
-    lastOralDate: "05/30/2028",
-    insurance: "Blue Cross",
-    contractType: "Annual",
-    contractExpiration: "06/30/2029",
-  },
-  {
-    name: "Thomas Brown",
-    subtitle: "73 · Male",
-    patientId: "PT-10023",
-    riskStatus: { label: "At risk", variant: "error" },
-    priority: { label: "High", variant: "faded" },
-    program: "Chronic Care",
-    provider: "Dr. Patel",
-    nextAppointment: "08/14/2028",
-    lastAppointment: "08/05/2028",
-    lastLab: "08/12/2028",
-    lastCimtDate: "07/22/2028",
-    lastSleep: "08/01/2028",
-    inflammationPanel: true,
-    lastOralDate: "07/08/2028",
-    insurance: "Medicare",
-    contractType: "Annual",
-    contractExpiration: "12/31/2028",
-  },
-  {
-    name: "Lisa Nguyen",
-    subtitle: "29 · Female",
-    patientId: "PT-10134",
-    riskStatus: { label: "Stable", variant: "success" },
-    priority: { label: "Low", variant: "faded" },
-    program: "Foundational Support",
-    provider: "Dr. Mewborn",
-    nextAppointment: "09/01/2028",
-    lastAppointment: "08/03/2028",
-    lastLab: "08/15/2028",
-    lastCimtDate: "06/18/2028",
-    lastSleep: "07/30/2028",
-    inflammationPanel: false,
-    lastOralDate: "06/01/2028",
-    insurance: "UnitedHealth",
-    contractType: "Monthly",
-    contractExpiration: "09/01/2028",
-  },
-  {
-    name: "Robert Martinez",
-    subtitle: "48 · Male",
-    patientId: "PT-10056",
-    riskStatus: { label: "At risk", variant: "error" },
-    priority: { label: "High", variant: "faded" },
-    program: "Behavioral Health",
-    provider: "Dr. Singh",
-    nextAppointment: "08/11/2028",
-    lastAppointment: "08/06/2028",
-    lastLab: "08/18/2028",
-    lastCimtDate: "07/28/2028",
-    lastSleep: "08/04/2028",
-    inflammationPanel: true,
-    lastOralDate: "07/12/2028",
-    insurance: "Cigna HMO",
-    contractType: "Quarterly",
-    contractExpiration: "12/31/2028",
-  },
-];
+const NON_FILTERABLE_COLUMNS = new Set([
+  "Patient name",
+  "Patient ID",
+  "Last CIMT date",
+  "Last sleep",
+  "Last oral date",
+]);
+
+function buildFilterCategories(): FilterCategory[] {
+  return columnDefs
+    .filter((col) => !NON_FILTERABLE_COLUMNS.has(col.label))
+    .map((col) => {
+      const uniqueValues = [
+        ...new Set(patients.map((p) => getPatientValue(p, col.label))),
+      ].sort();
+      return { key: col.label, label: col.label, options: uniqueValues };
+    });
+}
+
+const filterCategories = buildFilterCategories();
+const ROWS_PER_PAGE = 11;
 
 function PatientsPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
+    {},
+  );
+
+  const filteredPatients = useMemo(() => {
+    const activeKeys = Object.keys(activeFilters).filter(
+      (k) => activeFilters[k].length > 0,
+    );
+    if (activeKeys.length === 0) return patients;
+
+    return patients.filter((patient) =>
+      activeKeys.every((key) => {
+        const value = getPatientValue(patient, key);
+        return activeFilters[key].includes(value);
+      }),
+    );
+  }, [activeFilters]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredPatients.length / ROWS_PER_PAGE));
+  const paginatedPatients = filteredPatients.slice(
+    (currentPage - 1) * ROWS_PER_PAGE,
+    currentPage * ROWS_PER_PAGE,
+  );
+
+  const columns: TableHeaderColumn[] = columnDefs.map((col) => ({
+    ...col,
+    filtered: (activeFilters[col.label]?.length ?? 0) > 0,
+  }));
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--color-bg-weak-50)]">
@@ -292,7 +154,12 @@ function PatientsPage() {
                 className="w-[220px]"
               />
               <div className="flex items-center gap-2">
-                <Button variant="stroke" color="secondary" size="sm">
+                <Button
+                  variant="stroke"
+                  color="secondary"
+                  size="sm"
+                  onClick={() => setIsFilterOpen(true)}
+                >
                   <ListFilter />
                   Filter
                 </Button>
@@ -311,7 +178,7 @@ function PatientsPage() {
             <div className="min-h-0 flex-1 overflow-auto">
               <div className="min-w-[2460px]">
                 <TableHeader columns={columns} className="sticky top-0 z-10" />
-                {patients.map((patient, i) => (
+                {paginatedPatients.map((patient, i) => (
                   <TableRow
                     key={i}
                     name={patient.name}
@@ -342,10 +209,17 @@ function PatientsPage() {
         <div className="shrink-0 border-t border-stroke px-(--spacing-24) py-(--spacing-16)">
           <Pagination
             currentPage={currentPage}
-            totalPages={16}
+            totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
         </div>
+        <FilterPopup
+          open={isFilterOpen}
+          onClose={() => setIsFilterOpen(false)}
+          onApply={(filters) => { setActiveFilters(filters); setCurrentPage(1); }}
+          filterCategories={filterCategories}
+          initialFilters={activeFilters}
+        />
       </main>
     </div>
   );

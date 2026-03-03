@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Copy } from "lucide-react";
 import { Button, type ButtonProps } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { InputField } from "@/components/ui/input-field";
+import { Popup } from "@/components/ui/popup";
 import { ViewTab } from "@/components/ui/view-tab";
 import { ViewTabBar } from "@/components/ui/view-tab-bar";
 import { SideNav } from "@/components/ui/side-nav";
@@ -149,6 +151,8 @@ function ViewTabBarDemo() {
 }
 
 export default function ComponentShowcase() {
+  const [popupOpen, setPopupOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-background px-8 py-12 text-foreground">
       <div className="mx-auto max-w-5xl space-y-12">
@@ -245,6 +249,42 @@ export default function ComponentShowcase() {
         </section>
 
         <section className="space-y-6">
+          <h2 className="text-lg font-medium">Checkbox</h2>
+
+          <div className="grid max-w-sm gap-6">
+            <div>
+              <span className="mb-2 block text-xs text-muted-foreground">Default (unchecked)</span>
+              <Checkbox label="Option label" />
+            </div>
+
+            <div>
+              <span className="mb-2 block text-xs text-muted-foreground">Checked</span>
+              <Checkbox label="Option label" defaultChecked />
+            </div>
+
+            <div>
+              <span className="mb-2 block text-xs text-muted-foreground">Hover</span>
+              <Checkbox label="Option label" className="bg-secondary-lighter" />
+            </div>
+
+            <div>
+              <span className="mb-2 block text-xs text-muted-foreground">Disabled (unchecked)</span>
+              <Checkbox label="Option label" disabled />
+            </div>
+
+            <div>
+              <span className="mb-2 block text-xs text-muted-foreground">Disabled (checked)</span>
+              <Checkbox label="Option label" disabled defaultChecked />
+            </div>
+
+            <div>
+              <span className="mb-2 block text-xs text-muted-foreground">No label</span>
+              <Checkbox />
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-6">
           <h2 className="text-lg font-medium">Side Nav</h2>
           <div className="flex gap-6 rounded-lg border border-stroke p-4">
             <SideNav
@@ -303,6 +343,17 @@ export default function ComponentShowcase() {
               nextSession="09/01/2028"
               endDate="03/15/2029"
             />
+            <TableRow
+              name="David Kim"
+              subtitle="45 • Male"
+              riskStatus={{ label: "Stable", variant: "success" }}
+              priority={{ label: "High", variant: "faded" }}
+              program="Preventive Health"
+              provider="Dr. Mewborn"
+              lastSession="07/22/2028"
+              nextSession="08/19/2028"
+              endDate="01/10/2029"
+            />
           </div>
         </section>
 
@@ -334,6 +385,51 @@ export default function ComponentShowcase() {
               <ViewTab selected>No count</ViewTab>
             </div>
           </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-lg font-medium">Popup</h2>
+          <Button
+            variant="stroke"
+            color="secondary"
+            size="md"
+            onClick={() => setPopupOpen(true)}
+          >
+            Open popup
+          </Button>
+          <Popup
+            open={popupOpen}
+            onClose={() => setPopupOpen(false)}
+            title="Popup title"
+            footer={
+              <>
+                <Button
+                  variant="ghost"
+                  color="secondary"
+                  size="sm"
+                  onClick={() => setPopupOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="filled"
+                  color="primary"
+                  size="md"
+                  onClick={() => setPopupOpen(false)}
+                >
+                  Confirm
+                </Button>
+              </>
+            }
+          >
+            <div className="px-(--spacing-24) py-(--spacing-16)">
+              <p className="text-sm leading-5 text-foreground">
+                This is a reusable popup component. It provides a fixed 620×524
+                container with a title bar, scrollable body, and an optional
+                footer. Pass any content as children.
+              </p>
+            </div>
+          </Popup>
         </section>
       </div>
     </main>

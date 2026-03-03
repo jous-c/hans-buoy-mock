@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ComponentShowcase from "@/pages/ComponentShowcase";
+import PatientsPage from "@/pages/PatientsPage";
 
 function HomePage() {
   return (
@@ -28,6 +29,12 @@ function HomePage() {
         >
           View Component Showcase
         </Link>
+        <Link
+          to="/patients"
+          className="block text-center text-sm text-primary underline underline-offset-4 hover:text-primary-dark"
+        >
+          View Patients Dashboard
+        </Link>
       </div>
     </main>
   );
@@ -38,6 +45,7 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/components" element={<ComponentShowcase />} />
+      <Route path="/patients" element={<PatientsPage />} />
     </Routes>
   );
 }

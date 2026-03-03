@@ -30,6 +30,7 @@
   --alpha-pink-16: color-mix(in srgb, var(--color-pink-500) 16%, transparent);
   --alpha-teal-24: color-mix(in srgb, var(--color-brand-500) 24%, transparent);
   --alpha-teal-16: color-mix(in srgb, var(--color-brand-500) 16%, transparent);
+  --alpha-brown-10: color-mix(in srgb, var(--color-brown-500) 10%, transparent);
 
   /* ========== Static ========== */
   --color-static-black: var(--color-neutral-950);

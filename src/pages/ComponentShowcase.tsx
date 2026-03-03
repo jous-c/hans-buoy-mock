@@ -5,6 +5,9 @@ import { Button, type ButtonProps } from "@/components/ui/button";
 import { InputField } from "@/components/ui/input-field";
 import { ViewTab } from "@/components/ui/view-tab";
 import { ViewTabBar } from "@/components/ui/view-tab-bar";
+import { SideNav } from "@/components/ui/side-nav";
+import { TableRow } from "@/components/ui/table-row";
+import { TableHeader } from "@/components/ui/table-header";
 
 const variants = ["filled", "stroke", "lighter", "ghost"] as const;
 type Variant = (typeof variants)[number];
@@ -238,6 +241,68 @@ export default function ComponentShowcase() {
                 hint="This is a hint text to help user."
               />
             </div>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-lg font-medium">Side Nav</h2>
+          <div className="flex gap-6 rounded-lg border border-stroke p-4">
+            <SideNav
+              defaultExpanded={false}
+              className="h-[600px] rounded-lg border border-stroke"
+            />
+            <SideNav className="h-[600px] rounded-lg border border-stroke" />
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-lg font-medium">Table Header &amp; Row</h2>
+          <div className="overflow-x-auto rounded-lg border border-stroke">
+            <TableHeader
+              columns={[
+                { label: "Patient name", width: 220, sortable: true },
+                { label: "Health status", width: 150 },
+                { label: "Engagement", width: 150 },
+                { label: "Journey stage", width: 240 },
+                { label: "Provider", width: 140 },
+                { label: "Last session", width: 140 },
+                { label: "Next session", width: 140 },
+                { label: "End date", width: 140 },
+              ]}
+            />
+            <TableRow
+              name="Amanda Lee"
+              subtitle="34 • Female"
+              riskStatus={{ label: "At risk", variant: "error" }}
+              priority={{ label: "High", variant: "faded" }}
+              program="Foundational Support"
+              provider="Dr. Mewborn"
+              lastSession="08/08/2028"
+              nextSession="08/08/2028"
+              endDate="08/20/2028"
+            />
+            <TableRow
+              name="John Carter"
+              subtitle="58 • Male"
+              riskStatus={{ label: "Stable", variant: "success" }}
+              priority={{ label: "Medium", variant: "warning" }}
+              program="Chronic Care"
+              provider="Dr. Singh"
+              lastSession="07/15/2028"
+              nextSession="08/12/2028"
+              endDate="12/01/2028"
+            />
+            <TableRow
+              name="Maria Gonzalez"
+              subtitle="72 • Female"
+              riskStatus={{ label: "Monitoring", variant: "information" }}
+              priority={{ label: "Low", variant: "stable" }}
+              program="Wellness Program"
+              provider="Dr. Patel"
+              lastSession="08/01/2028"
+              nextSession="09/01/2028"
+              endDate="03/15/2029"
+            />
           </div>
         </section>
 

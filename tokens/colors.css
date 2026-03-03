@@ -144,6 +144,19 @@
   --color-sky-900: #393f40;
   --color-sky-950: #262a2b;
 
+  /* ========== Teal ========== */
+  --color-teal-50: #e4fbf8;
+  --color-teal-100: #d0fbf5;
+  --color-teal-200: #c2f5ee;
+  --color-teal-300: #84ebdd;
+  --color-teal-400: #3fdec9;
+  --color-teal-500: #22d3bb;
+  --color-teal-600: #1daf9c;
+  --color-teal-700: #178c7d;
+  --color-teal-800: #1a7569;
+  --color-teal-900: #16645a;
+  --color-teal-950: #0b463e;
+
   /* ========== Semantic — Success ========== */
   --color-success-50: #f0fdf4;
   --color-success-100: #dcfce7;

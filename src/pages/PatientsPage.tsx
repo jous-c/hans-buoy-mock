@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { ListFilter, ArrowUpDown, Columns3 } from "lucide-react";
 
 import { SideNav } from "@/components/ui/side-nav";
@@ -9,15 +9,32 @@ import { TableHeader, type TableHeaderColumn } from "@/components/ui/table-heade
 import { TableRow } from "@/components/ui/table-row";
 import { Pagination } from "@/components/ui/pagination";
 import { FilterPopup, type FilterCategory } from "@/components/ui/filter-popup";
+import { CreateViewPopup } from "@/components/ui/create-view-popup";
 import { patients, type PatientData } from "@/data/patients";
+
+interface SavedView {
+  id: string;
+  name: string;
+  filters: Record<string, string[]>;
+}
+
+const SAVED_VIEWS_KEY = "savedViews";
+
+function loadSavedViews(): SavedView[] {
+  try {
+    const raw = localStorage.getItem(SAVED_VIEWS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function persistSavedViews(views: SavedView[]) {
+  localStorage.setItem(SAVED_VIEWS_KEY, JSON.stringify(views));
+}
 
 const tabs: ViewTabItem[] = [
   { label: "All patients", count: 40 },
-  { label: "Health at risk", count: 12 },
-  { label: "Low engagement patients", count: 12 },
-  { label: "Elderly patients", count: 12 },
-  { label: "New patients", count: 12 },
-  { label: "Early stage patients", count: 12 },
 ];
 
 const columnDefs: TableHeaderColumn[] = [
@@ -83,27 +100,84 @@ function buildFilterCategories(): FilterCategory[] {
 const filterCategories = buildFilterCategories();
 const ROWS_PER_PAGE = 11;
 
+function filterPatients(filters: Record<string, string[]>): PatientData[] {
+  const activeKeys = Object.keys(filters).filter(
+    (k) => filters[k].length > 0,
+  );
+  if (activeKeys.length === 0) return patients;
+
+  return patients.filter((patient) =>
+    activeKeys.every((key) => {
+      const value = getPatientValue(patient, key);
+      return filters[key].includes(value);
+    }),
+  );
+}
+
 function PatientsPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isCreateViewOpen, setIsCreateViewOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
+  const [savedViews, setSavedViews] = useState<SavedView[]>(loadSavedViews);
 
-  const filteredPatients = useMemo(() => {
-    const activeKeys = Object.keys(activeFilters).filter(
-      (k) => activeFilters[k].length > 0,
-    );
-    if (activeKeys.length === 0) return patients;
+  useEffect(() => {
+    persistSavedViews(savedViews);
+  }, [savedViews]);
 
-    return patients.filter((patient) =>
-      activeKeys.every((key) => {
-        const value = getPatientValue(patient, key);
-        return activeFilters[key].includes(value);
-      }),
-    );
-  }, [activeFilters]);
+  const filteredPatients = useMemo(
+    () => filterPatients(activeFilters),
+    [activeFilters],
+  );
+
+  const allTabs: ViewTabItem[] = useMemo(() => {
+    const savedViewTabs: ViewTabItem[] = savedViews.map((view) => ({
+      label: view.name,
+      count: filterPatients(view.filters).length,
+    }));
+    return [...tabs, ...savedViewTabs];
+  }, [savedViews]);
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      setActiveTab(index);
+      setCurrentPage(1);
+      if (index >= tabs.length) {
+        const view = savedViews[index - tabs.length];
+        if (view) setActiveFilters(view.filters);
+      } else {
+        setActiveFilters({});
+      }
+    },
+    [savedViews],
+  );
+
+  const handleCreateView = useCallback(
+    (name: string, filters: Record<string, string[]>) => {
+      const newView: SavedView = {
+        id: crypto.randomUUID(),
+        name,
+        filters,
+      };
+      setSavedViews((prev) => {
+        const next = [...prev, newView];
+        setActiveTab(tabs.length + next.length - 1);
+        return next;
+      });
+      setActiveFilters(filters);
+      setCurrentPage(1);
+      setIsCreateViewOpen(false);
+    },
+    [],
+  );
+
+  const existingViewNames = useMemo(
+    () => savedViews.map((v) => v.name),
+    [savedViews],
+  );
 
   const totalPages = Math.max(1, Math.ceil(filteredPatients.length / ROWS_PER_PAGE));
   const paginatedPatients = filteredPatients.slice(
@@ -138,9 +212,10 @@ function PatientsPage() {
         {/* View tab bar */}
         <div className="shrink-0 px-(--spacing-24) pb-(--spacing-16)">
           <ViewTabBar
-            tabs={tabs}
+            tabs={allTabs}
             activeIndex={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={handleTabChange}
+            onAddClick={() => setIsCreateViewOpen(true)}
           />
         </div>
 
@@ -160,7 +235,7 @@ function PatientsPage() {
                   size="sm"
                   onClick={() => setIsFilterOpen(true)}
                 >
-                  <ListFilter />
+                  <ListFilter className="text-[var(--color-icon-sub-800)]" />
                   Filter
                 </Button>
                 <Button variant="stroke" color="secondary" size="sm">
@@ -219,6 +294,13 @@ function PatientsPage() {
           onApply={(filters) => { setActiveFilters(filters); setCurrentPage(1); }}
           filterCategories={filterCategories}
           initialFilters={activeFilters}
+        />
+        <CreateViewPopup
+          open={isCreateViewOpen}
+          onClose={() => setIsCreateViewOpen(false)}
+          onCreate={handleCreateView}
+          filterCategories={filterCategories}
+          existingViewNames={existingViewNames}
         />
       </main>
     </div>

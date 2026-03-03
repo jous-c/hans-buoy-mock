@@ -30,7 +30,7 @@ function TableHeaderCell({
           {children}
         </span>
         {filtered && (
-          <ListFilter className="size-4 shrink-0 text-primary" />
+          <ListFilter className="size-4 shrink-0 text-[var(--color-icon-brand-light)]" />
         )}
       </div>
     </div>

@@ -82,18 +82,20 @@ function InputField({
           disabled && "opacity-50 pointer-events-none",
         )}
       >
-        <span
-          className={cn(
-            "shrink-0 [&_svg]:size-5",
-            disabled
-              ? "text-icon-disabled"
-              : variant === "destructive"
-                ? "text-icon-soft"
-                : "text-icon-soft",
-          )}
-        >
-          {leadingIcon ?? <Search />}
-        </span>
+        {leadingIcon !== false && (
+          <span
+            className={cn(
+              "shrink-0 [&_svg]:size-5",
+              disabled
+                ? "text-icon-disabled"
+                : variant === "destructive"
+                  ? "text-icon-soft"
+                  : "text-icon-soft",
+            )}
+          >
+            {leadingIcon ?? <Search />}
+          </span>
+        )}
         <input
           id={inputId}
           disabled={disabled}

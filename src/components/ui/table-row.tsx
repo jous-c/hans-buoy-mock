@@ -166,10 +166,6 @@ function TableRow({
         </div>
       </TableRowCell>
 
-      <TableRowCell className="w-[120px] gap-3 py-3 pl-3 pr-5">
-        <span className={cn(textCell, "text-sm text-text-sub")}>{patientId}</span>
-      </TableRowCell>
-
       <TableRowCell className="w-[150px] gap-2 p-3">
         {riskStatus && <StatusBadge {...riskStatus} />}
       </TableRowCell>
@@ -229,6 +225,10 @@ function TableRow({
 
       <TableRowCell className="w-[160px] gap-3 py-3 pl-3 pr-5">
         <span className={textCell}>{contractExpiration}</span>
+      </TableRowCell>
+
+      <TableRowCell className="w-[120px] gap-3 py-3 pl-3 pr-5">
+        <span className={cn(textCell, "text-sm text-text-sub")}>{patientId}</span>
       </TableRowCell>
     </div>
   );

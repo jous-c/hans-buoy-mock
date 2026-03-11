@@ -85,7 +85,15 @@ function CreateViewPopup({
       title="Create new view"
       className="h-[620px]"
       footer={
-        <div className="flex w-full justify-end">
+        <div className="flex w-full justify-between">
+
+          <button
+            onClick={handleReset}
+            className="text-sm font-medium leading-5 text-text-sub transition-colors hover:text-foreground cursor-pointer"
+          >
+            Reset
+          </button>
+
           <Button
             variant="filled"
             color="primary"
@@ -95,6 +103,7 @@ function CreateViewPopup({
           >
             Create view
           </Button>
+          
         </div>
       }
     >
@@ -112,15 +121,7 @@ function CreateViewPopup({
         </div>
 
         <div className="flex shrink-0 items-center justify-between px-(--spacing-24) pb-(--spacing-8)">
-          <span className="text-sm font-medium leading-5 text-foreground">
-            Select filters
-          </span>
-          <button
-            onClick={handleReset}
-            className="text-sm font-medium leading-5 text-text-sub transition-colors hover:text-foreground cursor-pointer"
-          >
-            Reset
-          </button>
+        
         </div>
 
         <div className="min-h-0 flex-1 border-t border-stroke">

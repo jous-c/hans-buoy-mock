@@ -10,6 +10,7 @@ import { TableRow } from "@/components/ui/table-row";
 import { Pagination } from "@/components/ui/pagination";
 import { FilterPopup, type FilterCategory } from "@/components/ui/filter-popup";
 import { CreateViewPopup } from "@/components/ui/create-view-popup";
+import { PatientPanel } from "@/components/ui/patient-panel";
 import { patients, type PatientData } from "@/data/patients";
 
 interface SavedView {
@@ -39,7 +40,6 @@ const tabs: ViewTabItem[] = [
 
 const columnDefs: TableHeaderColumn[] = [
   { label: "Patient name", width: 220, sortable: true },
-  { label: "Patient ID", width: 120 },
   { label: "Health status", width: 150 },
   { label: "Engagement", width: 150 },
   { label: "Journey stage", width: 240 },
@@ -54,6 +54,7 @@ const columnDefs: TableHeaderColumn[] = [
   { label: "Insurance", width: 150 },
   { label: "Contract type", width: 150 },
   { label: "Contract expiration", width: 160 },
+  { label: "Patient ID", width: 120 },
 ];
 
 function getPatientValue(patient: PatientData, columnLabel: string): string {
@@ -119,6 +120,7 @@ function PatientsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isCreateViewOpen, setIsCreateViewOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<PatientData | null>(null);
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
@@ -256,6 +258,7 @@ function PatientsPage() {
                 {paginatedPatients.map((patient, i) => (
                   <TableRow
                     key={i}
+                    onClick={() => setSelectedPatient(patient)}
                     name={patient.name}
                     subtitle={patient.subtitle}
                     patientId={patient.patientId}
@@ -303,6 +306,12 @@ function PatientsPage() {
           existingViewNames={existingViewNames}
         />
       </main>
+
+      <PatientPanel
+        patient={selectedPatient}
+        open={selectedPatient !== null}
+        onClose={() => setSelectedPatient(null)}
+      />
     </div>
   );
 }

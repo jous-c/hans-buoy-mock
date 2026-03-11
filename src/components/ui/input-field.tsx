@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const inputContainerVariants = cva(
   [
-    "flex items-center gap-2 rounded-lg border px-3 py-2.5",
+    "flex items-center gap-2 rounded-lg border px-3 py-[7px]",
     "transition-colors duration-150",
     "has-disabled:opacity-50 has-disabled:pointer-events-none",
   ].join(" "),
@@ -16,7 +16,7 @@ const inputContainerVariants = cva(
         default: [
           "border-stroke bg-white",
           "hover:border-stroke-sub",
-          "focus-within:border-stroke-strong focus-within:border-2 focus-within:px-[11px] focus-within:py-[9px]",
+          "focus-within:border-stroke-strong focus-within:border-2 focus-within:px-[11px] focus-within:py-[6px]",
         ].join(" "),
         destructive: "border-destructive bg-white",
       },

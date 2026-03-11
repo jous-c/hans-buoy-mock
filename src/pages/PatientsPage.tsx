@@ -11,6 +11,7 @@ import { Pagination } from "@/components/ui/pagination";
 import { FilterPopup, type FilterCategory } from "@/components/ui/filter-popup";
 import { CreateViewPopup } from "@/components/ui/create-view-popup";
 import { PatientPanel } from "@/components/ui/patient-panel";
+import { ToastProvider } from "@/components/ui/toast";
 import { patients, type PatientData } from "@/data/patients";
 
 interface SavedView {
@@ -20,6 +21,7 @@ interface SavedView {
 }
 
 const SAVED_VIEWS_KEY = "savedViews";
+const PATIENT_OVERRIDES_KEY = "patientOverrides";
 
 function loadSavedViews(): SavedView[] {
   try {
@@ -32,6 +34,19 @@ function loadSavedViews(): SavedView[] {
 
 function persistSavedViews(views: SavedView[]) {
   localStorage.setItem(SAVED_VIEWS_KEY, JSON.stringify(views));
+}
+
+function loadPatientOverrides(): Record<string, Partial<PatientData>> {
+  try {
+    const raw = localStorage.getItem(PATIENT_OVERRIDES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function persistPatientOverrides(overrides: Record<string, Partial<PatientData>>) {
+  localStorage.setItem(PATIENT_OVERRIDES_KEY, JSON.stringify(overrides));
 }
 
 const tabs: ViewTabItem[] = [
@@ -115,24 +130,89 @@ function filterPatients(filters: Record<string, string[]>): PatientData[] {
   );
 }
 
+const FIELD_TO_KEY: Record<string, keyof PatientData> = {
+  "Journey stage": "program",
+  "Next appointment": "nextAppointment",
+  "Last appointment": "lastAppointment",
+  Age: "age",
+  Sex: "sex",
+  DOB: "dob",
+  Provider: "provider",
+  Insurance: "insurance",
+  Email: "email",
+  Phone: "phone",
+  "Primary address": "primaryAddress",
+  "Secondary address": "secondaryAddress",
+  Timezone: "timezone",
+  Occupation: "occupation",
+  Background: "background",
+  Notes: "notes",
+  "Last lab": "lastLab",
+  "Last CIMT": "lastCimtDate",
+  "Last sleep": "lastSleep",
+  "Last oral": "lastOralDate",
+  "Inflammation panel": "inflammationPanelLabel",
+  "Contract type": "contractType",
+  "Contract renewal": "contractRenewal",
+  "Contract date": "contractDate",
+  "Contract expiration": "contractExpiration",
+  "Paid?": "paid",
+};
+
+function applyOverrides(
+  patient: PatientData,
+  overrides: Record<string, Partial<PatientData>>,
+): PatientData {
+  const patch = overrides[patient.patientId];
+  return patch ? { ...patient, ...patch } : patient;
+}
+
 function PatientsPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isCreateViewOpen, setIsCreateViewOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<PatientData | null>(null);
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {},
   );
   const [savedViews, setSavedViews] = useState<SavedView[]>(loadSavedViews);
+  const [patientOverrides, setPatientOverrides] = useState<
+    Record<string, Partial<PatientData>>
+  >(loadPatientOverrides);
 
   useEffect(() => {
     persistSavedViews(savedViews);
   }, [savedViews]);
 
+  useEffect(() => {
+    persistPatientOverrides(patientOverrides);
+  }, [patientOverrides]);
+
   const filteredPatients = useMemo(
-    () => filterPatients(activeFilters),
-    [activeFilters],
+    () =>
+      filterPatients(activeFilters).map((p) =>
+        applyOverrides(p, patientOverrides),
+      ),
+    [activeFilters, patientOverrides],
+  );
+
+  const selectedPatient = useMemo(() => {
+    if (!selectedPatientId) return null;
+    const base = patients.find((p) => p.patientId === selectedPatientId);
+    return base ? applyOverrides(base, patientOverrides) : null;
+  }, [selectedPatientId, patientOverrides]);
+
+  const handleUpdateField = useCallback(
+    (patientId: string, field: string, value: string) => {
+      const key = FIELD_TO_KEY[field];
+      if (!key) return;
+      setPatientOverrides((prev) => ({
+        ...prev,
+        [patientId]: { ...prev[patientId], [key]: value },
+      }));
+    },
+    [],
   );
 
   const allTabs: ViewTabItem[] = useMemo(() => {
@@ -187,12 +267,20 @@ function PatientsPage() {
     currentPage * ROWS_PER_PAGE,
   );
 
+  const activeFilterCount = useMemo(
+    () => Object.values(activeFilters).filter((arr) => arr.length > 0).length,
+    [activeFilters],
+  );
+
+  const isSavedViewActive = activeTab >= tabs.length;
+
   const columns: TableHeaderColumn[] = columnDefs.map((col) => ({
     ...col,
     filtered: (activeFilters[col.label]?.length ?? 0) > 0,
   }));
 
   return (
+    <ToastProvider>
     <div className="flex h-screen overflow-hidden bg-[var(--color-bg-weak-50)]">
       <SideNav
         defaultExpanded={false}
@@ -237,16 +325,21 @@ function PatientsPage() {
                   size="sm"
                   onClick={() => setIsFilterOpen(true)}
                 >
-                  <ListFilter className="text-[var(--color-icon-sub-800)]" />
+                  {isSavedViewActive && activeFilterCount > 0 && (
+                    <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-(--color-state-success-lighter) px-1 text-xs font-medium leading-none text-(--color-state-success-dark)">
+                      {activeFilterCount}
+                    </span>
+                  )}
                   Filter
+                  <ListFilter className="text-[var(--color-icon-sub-800)]" />
                 </Button>
                 <Button variant="stroke" color="secondary" size="sm">
-                  <ArrowUpDown />
                   Sort
+                  <ArrowUpDown />
                 </Button>
                 <Button variant="stroke" color="secondary" size="sm">
-                  <Columns3 />
                   Manage columns
+                  <Columns3 />
                 </Button>
               </div>
             </div>
@@ -258,7 +351,7 @@ function PatientsPage() {
                 {paginatedPatients.map((patient, i) => (
                   <TableRow
                     key={i}
-                    onClick={() => setSelectedPatient(patient)}
+                    onClick={() => setSelectedPatientId(patient.patientId)}
                     name={patient.name}
                     subtitle={patient.subtitle}
                     patientId={patient.patientId}
@@ -284,7 +377,7 @@ function PatientsPage() {
         </div>
 
         {/* Pagination -- fixed */}
-        <div className="shrink-0 border-t border-stroke px-(--spacing-24) py-(--spacing-16)">
+        <div className="shrink-0 border-stroke px-(--spacing-24) py-(--spacing-16)">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -310,9 +403,11 @@ function PatientsPage() {
       <PatientPanel
         patient={selectedPatient}
         open={selectedPatient !== null}
-        onClose={() => setSelectedPatient(null)}
+        onClose={() => setSelectedPatientId(null)}
+        onUpdateField={handleUpdateField}
       />
     </div>
+    </ToastProvider>
   );
 }
 

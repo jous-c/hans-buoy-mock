@@ -18,6 +18,21 @@ export type PatientData = {
   insurance: string;
   contractType: string;
   contractExpiration: string;
+  notes?: string;
+  timezone?: string;
+  occupation?: string;
+  background?: string;
+  paid?: string;
+  age?: string;
+  sex?: string;
+  dob?: string;
+  email?: string;
+  phone?: string;
+  primaryAddress?: string;
+  secondaryAddress?: string;
+  contractRenewal?: string;
+  contractDate?: string;
+  inflammationPanelLabel?: string;
 };
 
 export const patients: PatientData[] = [
